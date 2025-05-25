@@ -1,0 +1,136 @@
+openapi: 3.0.0
+info:
+  title: Banking Transaction Categorization API
+  version: 1.0.0
+
+paths:
+  /transactions:
+    post:
+      summary: Submit a new transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionInput'
+      responses:
+        '200':
+          description: Transaction already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        '201':
+          description: Transaction created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal server error
+
+    get:
+      summary: Retrieve all categorized transactions
+      parameters:
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: number
+            example: 20
+          description: Max number of transactions to return (default 20, max 100)
+        - in: query
+          name: after
+          required: false
+          schema:
+            type: string
+          description: Cursor for pagination
+      responses:
+        '200':
+          description: List of transactions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transaction'
+                  next:
+                    type: string
+                    nullable: true
+
+  /transactions/{id}:
+    get:
+      summary: Retrieve a specific transaction by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Transaction UUID
+      responses:
+        '200':
+          description: The transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '404':
+          description: Transaction not found
+
+components:
+  schemas:
+    TransactionInput:
+      type: object
+      required:
+        - externalId
+        - amount
+        - date
+        - description
+        - type
+        - accountNumber
+      properties:
+        externalId:
+          type: string
+          required: true
+        amount:
+          type: number
+          required: true
+        date:
+          type: string
+          required: true
+        description:
+          type: string
+          required: true
+        type:
+          type: string
+          required: true
+        accountNumber:
+          type: string
+          required: true
+        source:
+          type: string
+          default: bank
+          required: false
+
+    Transaction:
+      allOf:
+        - $ref: '#/components/schemas/TransactionInput'
+        - type: object
+          required: [id, category]
+          properties:
+            id:
+              type: string
+            category:
+              type: string
