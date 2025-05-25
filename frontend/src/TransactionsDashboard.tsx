@@ -57,7 +57,7 @@ export const TransactionsDashboard = () => {
       }
 
       if (!cancelled) {
-        setTimeout(poll, 3000); // 🕒 safe and sequential
+        setTimeout(poll, 3000);
       }
     };
 

@@ -28,15 +28,15 @@ const BATCH_CATEGORIZATION_SCHEMA = z.object({
 });
 const openai = new OpenAI();
 
+const systemPrompt = `
+You are a bank transaction classifier. Categorize each transaction into one of the following categories:\n${VALID_CATEGORIES.join(', ')}.`;
+
 export const categorizeTransactionsBatch = async (
   transactions: Transaction[],
 ): Promise<Transaction[]> => {
   if (transactions.length === 0) {
     return [];
   }
-
-  const systemPrompt = `
-You are a bank transaction classifier. Categorize each transaction into one of the following categories:\n${VALID_CATEGORIES.join(', ')}.`;
 
   const formatted = transactions
     .map((t) => `ID: ${t.id}, Description: ${t.description}, Amount: ${t.amount}, Type: ${t.type}`)
