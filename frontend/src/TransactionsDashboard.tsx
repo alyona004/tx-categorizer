@@ -47,24 +47,26 @@ export const TransactionsDashboard = () => {
   };
 
   useEffect(() => {
-    const poll = async () => {
-      try {
-        const latest = await fetchAllTransactions();
+    let cancelled = false;
 
-        // Only update if number of transactions changed
-        if (latest.length !== transactions.length) {
-          setTransactions(latest);
-        }
-      } catch (err) {
-        console.error("Polling failed:", err);
+    const poll = async () => {
+      const latest = await fetchAllTransactions();
+
+      if (!cancelled && latest.length !== transactions.length) {
+        setTransactions(latest);
+      }
+
+      if (!cancelled) {
+        setTimeout(poll, 3000); // 🕒 safe and sequential
       }
     };
 
     poll();
 
-    const interval = setInterval(poll, 3000);
-    return () => clearInterval(interval);
-  });
+    return () => {
+      cancelled = true;
+    };
+  }, [transactions.length]);
 
   return (
     <>

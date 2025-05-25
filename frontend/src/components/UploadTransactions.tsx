@@ -75,8 +75,6 @@ export const UploadTransactions = () => {
 
             if (!response.ok) {
               console.error("Failed to send transaction:", tx);
-            } else {
-              console.log("Sent:", tx);
             }
           } catch (err) {
             console.error("Network error:", err);
