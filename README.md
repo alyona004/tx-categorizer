@@ -35,10 +35,10 @@ Environment:
 - Swagger Docs: https://localhost:300/docs
 
 ## Running tests
-``
+```
 cd backend
 npm test
-``
+```
 
 ## Design decisions
 
