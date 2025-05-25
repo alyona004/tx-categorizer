@@ -75,5 +75,6 @@ Trade-offs
 - 🔴 Slightly more complexity in deduplication and key lookup
 
 ## Room for improvement
+- Logs & Monitoring
 - Replace polling with WebSocket notifications
 - Add auth
