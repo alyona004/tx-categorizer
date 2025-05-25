@@ -67,18 +67,12 @@ Trade-offs
 - 🔴 Can cause unnecessary load if polling is too frequent
 - 🔴 Delay between final insert and UI update
 
-### Flexible trnsaction identity
+### Flexible transaction identity
 Use a composite key (`externalId`, `source`) to uniquely identify transactions. It allows importing transactions from different banking applications or data sources without collision.
 
 Trade-offs
 - 🟢 Future-proof for multi-source ingestion (e.g. multi-bank aggregation)
 - 🔴 Slightly more complexity in deduplication and key lookup
-
-### PostgreSQL as database
-
-- Batching: Group transactions in batches of 50 before sending to OpenAI to reduce cost and latency.
-- Caching: Use account number to cache category results and avoid repeated OpenAI calls.
-- Polling UI: Frontend polls `/transactions` periodically after upload to stay fresh without reloading.
 
 ## Room for improvement
 - Replace polling with WebSocket notifications
